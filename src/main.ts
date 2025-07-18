@@ -161,6 +161,22 @@ async function main() {
       ]
     },
   })
+
+  webContents.setWindowOpenHandler(() => {
+    const [width, height] = window.getSize()
+    const [x, y] = window.getPosition()
+    const offset = 24
+
+    return {
+      action: 'allow',
+      overrideBrowserWindowOptions: {
+        width,
+        height,
+        x: x + offset,
+        y: y + offset,
+      },
+    }
+  })
 }
 
 main()
