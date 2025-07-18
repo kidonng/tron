@@ -53,6 +53,23 @@ async function main() {
         { type: 'separator' },
 
         {
+          label: 'Resize',
+          submenu: [
+            [360, 720],
+            [600, 800],
+            [800, 600],
+            [1024, 768],
+            [1280, 720],
+            [1920, 1080],
+          ].map(([width, height]) => ({
+            label: `${width} × ${height}`,
+            click() {
+              window.setSize(width, height)
+              window.center()
+            },
+          })),
+        },
+        {
           label: 'Toggle Always On Top',
           click() {
             window.setAlwaysOnTop(!window.isAlwaysOnTop())
