@@ -7,7 +7,12 @@ import contextMenu from 'electron-context-menu'
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 
-const { _, ...options } = yargs(hideBin(argv)).parseSync()
+const { _, ...options } = yargs(hideBin(argv))
+    .options({
+      width: { type: 'number', default: 1024, },
+      height: { type: 'number', default: 768, },
+    })
+    .parseSync()
 
 const target = (_[0] as string) || 'example.com'
 const url = target.includes('://') ? target : `http${target.startsWith('localhost') ? '' : 's'}://${target}`
