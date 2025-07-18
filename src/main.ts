@@ -162,6 +162,14 @@ async function main() {
     },
   })
 
+  configureWindow(window)
+}
+
+main()
+
+function configureWindow(window: BrowserWindow) {
+  const { webContents } = window
+
   webContents.setWindowOpenHandler(() => {
     const [width, height] = window.getSize()
     const [x, y] = window.getPosition()
@@ -170,6 +178,7 @@ async function main() {
     return {
       action: 'allow',
       overrideBrowserWindowOptions: {
+        ...options,
         width,
         height,
         x: x + offset,
@@ -177,9 +186,9 @@ async function main() {
       },
     }
   })
-}
 
-main()
+  webContents.on('did-create-window', configureWindow)
+}
 
 function resetAndQuit() {
   const option = dialog.showMessageBoxSync({
