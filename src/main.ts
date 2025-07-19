@@ -25,7 +25,10 @@ app.setPath('userData', userData)
 async function main() {
   await app.whenReady()
 
-  const window = new BrowserWindow(options as BaseWindowConstructorOptions)
+  const window = new BrowserWindow({
+    title: host,
+    ...options,
+  })
   const { webContents } = window
   const { navigationHistory } = webContents
 
