@@ -29,8 +29,6 @@ async function main() {
     title: host,
     ...options,
   })
-  const { webContents } = window
-  const { navigationHistory } = webContents
 
   window.loadURL(url)
 
@@ -47,14 +45,14 @@ async function main() {
       submenu: [
         {
           label: 'Open in Browser',
-          click() {
-            shell.openExternal(webContents.getURL())
+          click(_, window) {
+            shell.openExternal((window as BrowserWindow).webContents.getURL())
           },
         },
         {
           label: 'Copy Link',
-          click() {
-            clipboard.writeText(webContents.getURL())
+          click(_, window) {
+            clipboard.writeText((window as BrowserWindow).webContents.getURL())
           },
         },
 
@@ -71,24 +69,24 @@ async function main() {
             [1920, 1080],
           ].map(([width, height]) => ({
             label: `${width} × ${height}`,
-            click() {
-              window.setSize(width, height)
-              window.center()
+            click(_, window) {
+              window!.setSize(width, height)
+              window!.center()
             },
           })),
         },
         {
           label: 'Toggle Always On Top',
-          click() {
-            window.setAlwaysOnTop(!window.isAlwaysOnTop())
+          click(_, window) {
+            window!.setAlwaysOnTop(!window!.isAlwaysOnTop())
           },
         },
         {
           label: 'Set Opacity',
           submenu: [0.25, 0.5, 0.75, 1].map(opacity => ({
             label: `${opacity * 100}%`,
-            click() {
-              window.setOpacity(opacity)
+            click(_, window) {
+              window!.setOpacity(opacity)
             },
           })),
         },
@@ -137,7 +135,8 @@ async function main() {
     showCopyVideoAddress: true,
     showSaveVideoAs: true,
 
-    prepend(_, { selectionText, linkURL, isEditable, mediaType }) {
+    prepend(_, { selectionText, linkURL, isEditable, mediaType }, window) {
+      const { navigationHistory } = (window as BrowserWindow).webContents
       const navigationVisible = !selectionText && !linkURL && !isEditable && mediaType === 'none'
 
       return [
